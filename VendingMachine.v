@@ -1,3 +1,5 @@
+`include "binary_to_segmented.v"
+
 module vending_machine (
     input C_5, // coin 5 sensor
     input C_10, // coin 10 sensor
@@ -50,6 +52,7 @@ module vending_machine (
             
             if(cancel) begin
                 state <= RETURN;
+            end
             // manage different states
             case (state)
                 IDLE , INSUFFICIENT: begin
@@ -85,7 +88,7 @@ module vending_machine (
                         if(balance >= 50) begin
                             balance <= balance - 50;
                             state <= DISPENSE;
-                            p_50_out <= 1;
+                            P_50_out <= 1;
                         end else begin
                             state <= INSUFFICIENT;
                         end
@@ -132,7 +135,7 @@ module vending_machine (
     assign insufficient_led = (state == INSUFFICIENT);
 
     wire [3:0] tens_digit = balance / 10; // 0-9 (dahgan)
-    wire [3:0] units_digit = balance % 10;// 0-9 (yekan)
+    wire [3:0] units_digit = balance % 10; // 0-9 (yekan)
 
     binary_to_segmented units_decoder (
         .binary(units_digit),
